@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <div id="app">
+    <head>
+      <title>{{title}}</title>
+      <meta charset="utf-8">
+    </head>
+    <body>
+      <header id="header">
+	<h1>{{title}}</h1>
+
+      </header>
+      <router-view></router-view>
+    </body>
+  </div>
+
+  <!-- Views -->
+  <script type="text/x-template" id="main-template">
+    <div id="content">
+      <nav>
+        <li v-for="board in boards">{{board.tag}} - {{board.name}}</li>
+      </nav>
+      <section id="feed">
+        <div class="post" v-for="post in posts" style="margin: 10px;">
+          <label class="post-header">
+            <span>{{post.id}}</span>
+            <span>{{post.poster}}</span>
+            <span>{{post.timestamp}}</span>
+          </label>
+          <vue-markdown>{{post.message}}</vue-markdown>
+        </div>
+      </section>
+    </div>
+  </script>
+
+  <script src="./lib/vue-markdown.js"></script>
+  <script src="./lib/vue.min.js"></script>
+  <script src="./lib/vue-router.js"></script>
+  <script src="./js/view.js"></script>
+  <script src="./js/index.js"></script>
+</html>
