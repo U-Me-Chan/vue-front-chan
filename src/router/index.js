@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../components/Main.vue'
-import About from '../components/About.vue'
 
 Vue.use(VueRouter)
 
@@ -9,10 +8,6 @@ const routes = [
     {
         path: '/',
         component: Main
-    },
-    {
-        path: '/about',
-        component: About
     },
     {
         path: '/thread/:id',
