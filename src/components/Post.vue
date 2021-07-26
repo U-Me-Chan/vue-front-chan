@@ -67,7 +67,7 @@ export default {
         },
         prerender: function (message) {
             const reply = />>\d{1,10}/g;
-            const image = /(?!\\!\[[a-z]+\]\()(?<!['|"])https?:\/\/[a-z.0-9-_]+\.(jpg|jpeg?|gif|png)(?<!['|"])(?!\))/gmi;
+            const image = /(?!\\!\[[a-z]+\]\()(?<!['|"])((?<twilink>https:\/\/pbs\.twimg\.com\/media\/[a-z0-9?=&]+)|(?<link>https?:\/\/[a-z.\0-9-_]+\.(?<ext>jpg|jpeg?|gif|png)(?<params>\?[a-z=&0-9]+)?))(?<!['|"])$(?!\))/gmi;
             const audio = /(https?):\/\/[a-z./0-9-_]+(\.(ogg|mp3)$)/gmi;
             const youtube = /(https:\/\/www\.youtube\.com\/watch\?v=([0-9a-z_-]+)|https:\/\/youtu\.be\/([0-9a-z_-]+))/mi;
 
