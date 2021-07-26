@@ -1,29 +1,29 @@
 <template>
-<table class="post" @click="selectThread(id)" :id="id" :ref="id">
-  <tr class="post-header">
-    <label class="post-data">
-      <span class="post-number">#{{ !parentId ? id : parentId + '/' + id }}</span>
-      <span class="post-author">{{ poster }}</span>
-      <span class="post-subject">{{ !subject ? '...' : subject }}</span>
-    </label>
-  </tr>
-  <tr>
-    <vue-markdown class="post-message"
-                  :typographer=true
-                  :html=true
-                  :toc=false
-                  :source=filterMessage
-                  :prerender="prerender"></vue-markdown>
-  </tr>
-</table>
+<div class="box" :id="id" :ref="id">
+  <b-tag size="is-medium" type="is-success is-light">{{ poster }}</b-tag>
+  <b-tag size="is-medium" type="is-info is-light">{{ !subject ? '...' : subject }}</b-tag>
+  <b-tag size="is-medium" type="is-light">#{{ !parentId ? id : parentId + '/' + id }}</b-tag>
+  <b-button type="is-text" size="is-small" v-if="!parentId" @click="selectThread(id)">Открыть</b-button>
+  <b-button type="is-text" size="is-small" @click="isFormVisible = !isFormVisible">Ответить</b-button>
+  <b-modal v-model="isFormVisible">
+    <Form v-if="isFormVisible" v-bind:parent_id="!parentId ? id : parentId" />
+  </b-modal>
+  <vue-markdown class="post-message"
+                :typographer=true
+                :html=true
+                :toc=false
+                :source=filterMessage
+                :prerender="prerender"></vue-markdown>
+</div>
 </template>
 
 <script>
 import VueMarkdown from 'vue-markdown'
+import Form from './Form.vue'
 
 export default {
     components: {
-        VueMarkdown
+        VueMarkdown, Form
     },
     name: 'Post',
     data: function () {
@@ -78,7 +78,7 @@ export default {
 
                 return `<br>${match}<br><br><img class= 'yt-preview' src='http://i1.ytimg.com/vi/${id}/hqdefault.jpg' alt='preview'><br>`;
             }).replace(image, match => {
-                return `<br><a href='${match}' target='_blank'><img src='${match}' alt='[image]'></a><br>`;
+                return `<br><a href='${match}' target='_blank'><img src='${match}' alt='[image]' class='image is-128-128'></a><br>`;
             }).replace(audio, match => {
                 return `<br><audio controls=true src='${match}'><br>`;
             });
@@ -88,61 +88,17 @@ export default {
 </script>
 
 <style>
-.post {
-    margin-right: 25%;
-    background-color: #111;
-    margin-bottom: 7px;
-    margin-top: 7px;
-    border-radius: 5px;
-    width: 100%;
-}
-
-.post-reply {
-    border-left: 20px solid #555;
-}
-
-.post-bottom {
-    widht: 100%;
-}
-
-.post:hover {
-    background-color: #161616
-}
-
-.post-active {
-    border: 10px solid #777;
-}
-
-.post-author {
-    margin-right: 10px;
-    color: #a04;
-}
-.post-subject {
-    color: #990;
-    font-weight: bold;
-}
-.post-header {
-    backgroun-color: #222;
-}
 .post-message {
     margin: 30px;
 }
-.post-number {
-    margin-right: 10px;
-    color: #a5a;
-}
 
-.post > img {
+img {
     margin-right: 30%;
-}
-
-.post-data {
-    padding: 10px;
 }
 
 blockquote {
     margin-left: 0px;
-    border-left: 4px solid #555;
+    border-left: 8px solid #ddd;
     padding-left: 16px;
     color: #083;
 }
@@ -163,7 +119,7 @@ img {
     height: 360px;
 }
 
-.clickable-elem {
-    margin: 20px;
+.tag {
+    margin-right: 10px;
 }
 </style>

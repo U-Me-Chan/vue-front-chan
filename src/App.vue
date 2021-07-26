@@ -1,21 +1,41 @@
 <template>
 <div id="app">
-  <nav class="menu">
-    <a href="/">Главная</a>
-    <li class="menu-item" v-for="board in boards" @click="selectBoard(board.tag)" :key="board.id" v-bind:class="{ active: tag === board.tag }">/{{board.tag}}/ - {{board.name}} </li>
-  </nav>
-  <router-view/>
+  <div class="columns is-3">
+    <div class="column is-one-fifth">
+      <b-menu class="menu">
+        <b-menu-list label="Ссылки">
+          <a href="/">Главная</a>
+          <a href="http://pissychan.scheoble.ml">Упрощённая версия</a>
+          <a href="https://discord.gg/DhhjsVgXBG">Discord-сервер</a>
+        </b-menu-list>
+        <b-menu-list label="Разделы">
+          <b-menu-item :label="board.name" class="menu-item" v-for="board in boards" @click="selectBoard(board.tag)" :key="board.id" v-bind:class="{ active: tag === board.tag }"></b-menu-item>
+        </b-menu-list>
+      </b-menu>
+    </div>
+    <div class="column is-half">
+      <router-view/>
+    </div>
+    <div class="column is-one-quarter">
+      <Feed :posts="posts"/>
+    </div>
+  </div>
 </div>
 </template>
 
 <script>
 import service from './service'
+import Feed from './components/Feed.vue'
 
 export default {
+    components: {
+        Feed
+    },
     data: function () {
         return {
             boards: [],
-            tag: ''
+            tag: '',
+            posts: [],
         }
     },
     created: function () {
@@ -23,6 +43,7 @@ export default {
 
         service.getAllBoards().then(
             (payload) => {
+                self.posts = payload.posts;
                 self.boards = payload.boards;
             },
             (error) => console.log(error)
@@ -32,6 +53,7 @@ export default {
         selectBoard: function (tag) {
             this.tag = tag;
             this.$router.push('/board/' + tag);
+            this.$buefy.toast.open(`Открываю раздел /${tag}`);
         }
     }
 }
@@ -45,7 +67,7 @@ export default {
 }
 
 body {
-    background-color: #000;
+    background-color: #eee;
     color: #888;
 }
 
@@ -63,6 +85,7 @@ a:visited {
 
 .menu {
     margin: 20px;
+    position: fixed;
 }
 
 .menu-item {
@@ -71,5 +94,9 @@ a:visited {
 
 .menu-item {
     list-style: none;
+}
+
+.menu-hide-button {
+    position: fixed;
 }
 </style>

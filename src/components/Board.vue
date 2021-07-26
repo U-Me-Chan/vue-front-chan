@@ -1,7 +1,11 @@
 <template>
 <div class="board">
-  <div class="toggle-form" @click="formVisible = !formVisible">Создать новую тему</div>
-  <Form v-if="formVisible" v-bind:tag="tag" />
+  <h1>/{{tag}}/ - {{name}}</h1>
+
+  <hr>
+  <center><b-button @click="formVisible = !formVisible">Создать новую тему</b-button></center>
+  <b-modal v-model="formVisible"><Form v-bind:tag="tag" /></b-modal>
+  <hr>
 
   <div class="board-topics">
     <Post v-for="post in topics" :key="post.id"
@@ -81,5 +85,10 @@ h3 {
 
 .toggle-form:hover {
     color: #aaa;
+}
+
+h1 {
+    font-size: 50px;
+    text-align: center;
 }
 </style>

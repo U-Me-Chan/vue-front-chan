@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Main from '../components/Main.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        component: Main
+        redirect: '/thread/72'
     },
     {
         path: '/thread/:id',

@@ -1,7 +1,7 @@
 <template>
 <div class="thread">
-  <div class="toggle-form" @click="isFormVisible = !isFormVisible">Ответить в тред</div>
-  <Form v-if="isFormVisible" v-bind:parent_id="opPost.id" />
+  <hr>
+  <h3>{{opPost.subject ? opPost.subject : '...'}}</h3>
 
   <Post :id="opPost.id"
         :poster="opPost.poster"
@@ -21,19 +21,15 @@
 </template>
 
 <script>
-import Form from './Form.vue'
 import Post from './Post.vue'
 import service from '../service'
 
 export default {
     name: 'Thread',
     components: {
-        Post, Form
+        Post
     },
     methods: {
-        replyPost: function (id) {
-            console.log(id);
-        },
         init: function () {
             var self = this;
 
@@ -106,5 +102,10 @@ export default {
 
 .toggle-form:hover {
     color: #aaa;
+}
+
+h3 {
+    font-size: 50px;
+    text-align: center;
 }
 </style>

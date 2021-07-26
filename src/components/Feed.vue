@@ -1,5 +1,6 @@
 <template>
 <div class="feed" v-if="posts.length">
+  <h3>Последние посты:</h3>
   <Post v-for="post in posts" :key="post.id"
         :id="post.id"
         :poster="post.poster"
@@ -28,5 +29,10 @@ export default {
 </script>
 
 <style scoped>
-
+h3 {
+    font-size: 27px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 </style>

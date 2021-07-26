@@ -1,32 +1,18 @@
 <template>
-  <div class="wrapper">
-<div class="form">
-  <table>
-    <tr v-if="parent_id">
-      <td class="info-cell">Не поднимать:</td>
-      <td><input type="checkbox" class="form-sage" true-value="true" false-value="false" v-model="sage"></td>
-    </tr>
-    <tr>
-      <td class="info-cell">Имя:</td>
-      <td><input type="text" class="form-poster" value="Anonymous" placeholder="Имя" v-model="poster" size="auto"></td>
-    </tr>
-    <tr>
-      <td class="info-cell">Тема:</td>
-      <td><input type="text" class="form-subject" value="" placeholder="Тема" v-model="subject" size="auto"></td>
-    </tr>
-    <tr>
-      <td class="info-cell">Сообщение:</td>
-      <td><textarea class="form-message" value="" placeholder="Сообщение" v-model="message" cols="auto" rows="10"/></td>
-    </tr>
-    <tr>
-      <td class="info-cell">
-        <span v-if="isMessageVisible" class="info-message"> {{infoMessage}}</span>
-        <span v-if="isErrorVisible" class="error-message">{{errorMessage}}</span>
-      </td>
-      <td><button class="form-submit" @click="create()">Отправить</button></td>
-    </tr>
-  </table>
-</div>
+<div class="box">
+  <h3 v-if="parent_id">Ответить в тред</h3>
+  <h3 v-if="!parent_id">Создать тред</h3>
+  <b-switch v-if="parent_id" v-model="isSage">Не поднимать</b-switch>
+  <b-field label="Имя">
+    <b-input value="Anonymous" v-model="poster"></b-input>
+  </b-field>
+  <b-field label="Тема">
+    <b-input value="" v-model="subject"></b-input>
+  </b-field>
+  <b-field label="Сообщение">
+    <b-input max-length="200" type="textarea" v-model="message"></b-input>
+  </b-field>
+  <b-button @click="create()" type="is-primary" expanded>Отправить</b-button>
 </div>
 </template>
 
@@ -48,7 +34,8 @@ export default {
         init: function () {
             this.subject = '';
             this.message = '';
-            this.sage = false;
+            this.isSage = false;
+            this.$parent.isFormVisible = false;
         },
         create: function () {
             var data = {};
@@ -57,7 +44,7 @@ export default {
             data['message'] = this.message;
             data['tag'] = this.tag;
 
-            if (this.sage === 'true') {
+            if (this.isSage === 'true') {
                 data['sage'] = true;
             }
 
@@ -65,14 +52,11 @@ export default {
                 data['parent_id'] = this.parent_id;
             }
 
+            this.$buefy.toast.open('Отправляю...');
+
             service.createPost(data).then(
                 (payload) => {
-                    this.infoMessage = 'Отправлено!';
-                    this.isMessageVisible = true;
-                    setTimeout(() =>  {
-                        this.isMessageVisible = false;
-                        this.infoMessage = '';
-                    }, 1000);
+                    this.$buefy.toast.open('Отправлено!');
 
                     this.$parent.init();
                     this.init();
@@ -84,8 +68,11 @@ export default {
                     }, 1000);
                 },
                 (error) => {
-                    this.errorMessage = error;
-                    this.isErrorVisible = true;
+                    this.$buefy.dialog.alert({
+                        title: 'Ошибка!',
+                        message: `Произошла ошибка при отправке поста: ${error}`,
+                        type: 'is-danger'
+                    });
                 }
             );
         }
@@ -95,11 +82,7 @@ export default {
             poster: 'Anonymous',
             subject: '',
             message: '',
-            sage: false,
-            infoMessage: '',
-            isMessageVisible: false,
-            errorMessage: '',
-            isErrorVisible: false
+            isSage: false,
         }
     }
 }

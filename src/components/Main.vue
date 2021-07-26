@@ -1,6 +1,5 @@
 <template>
 <div class="main">
-  <h3>Недавние посты:</h3>
   <Feed :posts="posts" />
 </div>
 </template>
