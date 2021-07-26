@@ -20,6 +20,7 @@
 <script>
 import VueMarkdown from 'vue-markdown'
 import Form from './Form.vue'
+import { bus } from '../bus'
 
 export default {
     components: {
@@ -47,6 +48,9 @@ export default {
             type: Boolean,
             default: false,
         }
+    },
+    mounted: function () {
+        bus.$on('form:success', () => this.isFormVisible = false);
     },
     computed: {
         filterMessage: function () {

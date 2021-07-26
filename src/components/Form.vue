@@ -18,6 +18,7 @@
 
 <script>
 import service from '../service';
+import { bus } from '../bus';
 
 export default {
     name: 'Form',
@@ -26,7 +27,7 @@ export default {
             type: String,
         },
         parent_id: {
-            type: [Number, Boolean],
+            type: [String, Boolean],
             default: false
         },
     },
@@ -57,15 +58,9 @@ export default {
             service.createPost(data).then(
                 (payload) => {
                     this.$buefy.toast.open('Отправлено!');
-
-                    this.$parent.init();
                     this.init();
 
-                    setTimeout(() => {
-                        var el = window.document.getElementById(payload.post_id);
-                        this.$nextTick(() => el.scrollIntoView());
-                        el.classList.add('post-active');
-                    }, 1000);
+                    bus.$emit('form:success', [payload]);
                 },
                 (error) => {
                     this.$buefy.dialog.alert({

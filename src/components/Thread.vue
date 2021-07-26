@@ -23,6 +23,7 @@
 <script>
 import Post from './Post.vue'
 import service from '../service'
+import { bus } from '../bus'
 
 export default {
     name: 'Thread',
@@ -71,7 +72,13 @@ export default {
     mounted: function () {
         setTimeout(() => {
             this.scrollToPost();
-        }, 1000)
+        }, 1000);
+
+        var self = this;
+
+        bus.$on('form:success', function () {
+            self.init();
+        });
     },
     watch:  {
         '$route': function (to, from) {
