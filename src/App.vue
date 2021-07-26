@@ -69,7 +69,7 @@ a:visited {
     margin: 1px;
 }
 
-li {
+.menu-item {
     list-style: none;
 }
 </style>
