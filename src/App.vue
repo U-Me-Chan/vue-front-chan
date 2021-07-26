@@ -7,6 +7,7 @@
           <a href="/">Главная</a>
           <a href="http://pissychan.scheoble.ml">Упрощённая версия</a>
           <a href="https://discord.gg/DhhjsVgXBG">Discord-сервер</a>
+          <a href="https://miaolz123.github.io/vue-markdown/">Пример разметки</a>
         </b-menu-list>
         <b-menu-list label="Разделы">
           <b-menu-item :label="board.name" class="menu-item" v-for="board in boards" @click="selectBoard(board.tag)" :key="board.id" v-bind:class="{ active: tag === board.tag }"></b-menu-item>
