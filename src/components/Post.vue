@@ -62,8 +62,8 @@ export default {
         filterMessage: function () {
             return this.message.replace(/<script.+?>.+?<\/script>|<(?:!|\/?[a-zA-Z]+).*?\/?>/gmi, '')
                 .replace(/ш/gmi, 'ì̷͕̠͗͌i̴̘̎į̸̬͎̀̈́̈́')
-                .replace(/a|а/gmi, 'а̵̪̊̚')
-                .replace(/o|о/gmi, 'о̷̱̕')
+                .replace(/а/gmi, 'а̵̪̊̚')
+                .replace(/о/gmi, 'о̷̱̕')
                 .replace(/у/gmi, 'у̵̘̰̘̂͠')
                 .replace(/ы/gmi, 'ӹ̶̡̛͙̪͇͍̞͙̖͙̹͇͙̦̜̦̩̬͔̻̝̘͙͎͙͖͚͕͖̹͓̣̲͎̟̘͉̙̠͉́͗́̈́́͌̆́̾̃̄̇͐̌̽̓̈́͂̔͛̽͆̀͌̆̉̍̐̿̃͑͐̑̓̒̔̿̓̇̕͘̕͘̕͘͜͝͠͠ͅͅ')
                 
