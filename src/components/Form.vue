@@ -27,16 +27,19 @@ export default {
             type: String,
         },
         parent_id: {
-            type: [String, Boolean],
+            type: [String, Boolean, Number],
             default: false
         },
+        message : {
+            type: String,
+            default: ''
+        }
     },
     methods: {
         init: function () {
             this.subject = '';
             this.message = '';
             this.isSage = false;
-            this.$parent.isFormVisible = false;
         },
         create: function () {
             var data = {};
@@ -52,8 +55,6 @@ export default {
             if (this.parent_id) {
                 data['parent_id'] = this.parent_id;
             }
-
-            this.$buefy.toast.open('Отправляю...');
 
             service.createPost(data).then(
                 (payload) => {
@@ -76,7 +77,6 @@ export default {
         return {
             poster: 'Anonymous',
             subject: '',
-            message: '',
             isSage: false,
         }
     }

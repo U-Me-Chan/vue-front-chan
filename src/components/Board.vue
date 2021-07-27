@@ -19,7 +19,8 @@
 </template>
 
 <script>
-import service from '../service';
+import service from '../service'
+import { bus } from '../bus'
 import Post from './Post.vue'
 import Form from './Form.vue'
 
@@ -35,6 +36,14 @@ export default {
             topics: [],
             formVisible: false
         }
+    },
+    mounted: function () {
+        var self = this
+
+        bus.$on('form:success', function () {
+            self.formVisible = false
+            self.init()
+        })
     },
     created: function () {
         this.tag = this.$route.params.tag;
@@ -69,26 +78,9 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-    color: #a50;
-}
-
-.toggle-form {
-    cursor: pointer;
-    font-weight: bold;
-    padding: 5px;
-    background-color: #333;
-    text-align: center;
-    width: 95%;
-    border: 1px #444 solid;
-}
-
-.toggle-form:hover {
-    color: #aaa;
-}
-
 h1 {
-    font-size: 50px;
+    font-size: 30px;
     text-align: center;
+    margin-top: 15px;
 }
 </style>

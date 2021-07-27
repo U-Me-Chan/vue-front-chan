@@ -3,14 +3,14 @@
   <div class="columns is-3">
     <div class="column is-one-fifth">
       <b-menu class="menu">
-        <b-menu-list label="Ссылки">
+        <b-menu-list label="Разделы">
           <a href="/">Главная</a>
+          <b-menu-item :label="board.name" class="menu-item" v-for="board in boards" @click="selectBoard(board.tag)" :key="board.id" v-bind:class="{ active: tag === board.tag }"></b-menu-item>
+        </b-menu-list>
+        <b-menu-list label="Ссылки">
           <a href="http://pissychan.scheoble.ml">Упрощённая версия</a>
           <a href="https://discord.gg/DhhjsVgXBG">Discord-сервер</a>
           <a href="https://miaolz123.github.io/vue-markdown/">Пример разметки</a>
-        </b-menu-list>
-        <b-menu-list label="Разделы">
-          <b-menu-item :label="board.name" class="menu-item" v-for="board in boards" @click="selectBoard(board.tag)" :key="board.id" v-bind:class="{ active: tag === board.tag }"></b-menu-item>
         </b-menu-list>
       </b-menu>
     </div>
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import service from './service'
-import Feed from './components/Feed.vue'
+import service from '../service'
+import Feed from './Feed.vue'
 
 export default {
     components: {
@@ -54,7 +54,6 @@ export default {
         selectBoard: function (tag) {
             this.tag = tag;
             this.$router.push('/board/' + tag);
-            this.$buefy.toast.open(`Открываю раздел /${tag}`);
         }
     }
 }

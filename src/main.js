@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App.vue'
+import App from './components/App.vue'
 import router from './router'
 import { Toast, Sidebar, Menu, Button, Modal, Input, Field, Tag, Switch } from 'buefy'
 import 'buefy/dist/buefy.css'

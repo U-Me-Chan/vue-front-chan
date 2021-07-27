@@ -6,7 +6,7 @@
   <b-button type="is-text" size="is-small" v-if="!parentId" @click="selectThread(id)">Открыть</b-button>
   <b-button type="is-text" size="is-small" @click="isFormVisible = !isFormVisible">Ответить</b-button>
   <b-modal v-model="isFormVisible">
-    <Form v-if="isFormVisible" v-bind:parent_id="!parentId ? id : parentId" />
+    <Form v-if="isFormVisible" v-bind:parent_id="!parentId ? id : parentId" v-bind:message="!parent ? `>>${id}` : `>>${parentId}`"/>
   </b-modal>
   <vue-markdown class="post-message"
                 :typographer=true
