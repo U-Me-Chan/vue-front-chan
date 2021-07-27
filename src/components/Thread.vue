@@ -1,7 +1,7 @@
 <template>
 <div class="thread">
-  <hr>
   <h3>{{opPost.subject ? opPost.subject : '...'}}</h3>
+  <hr>
 
   <Post :id="opPost.id"
         :poster="opPost.poster"
@@ -72,17 +72,21 @@ export default {
     mounted: function () {
         setTimeout(() => {
             this.scrollToPost();
-        }, 1000);
+        }, 1500);
 
         var self = this;
 
-        bus.$on('form:success', function () {
-            self.init();
-        });
+        bus.$on('form:success', () => self.init());
     },
     watch:  {
         '$route': function (to, from) {
-            if (to !== from) this.scrollToPost();
+            if (to !== from) {
+                this.id = this.$route.params.id
+                this.init()
+                setTimeout(() => {
+                    this.scrollToPost();
+                }, 1500);
+            }
         }
     },
     data: function () {
@@ -112,7 +116,8 @@ export default {
 }
 
 h3 {
-    font-size: 50px;
+    font-size: 27px;
     text-align: center;
+    margin-top: 20px;
 }
 </style>

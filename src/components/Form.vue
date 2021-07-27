@@ -10,7 +10,7 @@
     <b-input value="" v-model="subject"></b-input>
   </b-field>
   <b-field label="Сообщение">
-    <b-input max-length="200" type="textarea" v-model="message"></b-input>
+    <b-input max-length="200" type="textarea" v-model="message" ref="message"></b-input>
   </b-field>
   <b-button @click="create()" type="is-primary" expanded>Отправить</b-button>
 </div>

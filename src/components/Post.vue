@@ -1,12 +1,14 @@
 <template>
 <div class="box" :id="id" :ref="id">
   <b-tag size="is-medium" type="is-success is-light">{{ poster }}</b-tag>
-  <b-tag size="is-medium" type="is-info is-light">{{ !subject ? '...' : subject }}</b-tag>
+  <b-tag size="is-medium" type="is-info is-light" v-if="subject">{{subject}}</b-tag>
   <b-tag size="is-medium" type="is-light">#{{ !parentId ? id : parentId + '/' + id }}</b-tag>
-  <b-button type="is-text" size="is-small" v-if="!parentId" @click="selectThread(id)">Открыть</b-button>
+  <b-button type="is-text" size="is-small" @click="selectThread(id)">Открыть</b-button>
   <b-button type="is-text" size="is-small" @click="isFormVisible = !isFormVisible">Ответить</b-button>
   <b-modal v-model="isFormVisible">
-    <Form v-if="isFormVisible" v-bind:parent_id="!parentId ? id : parentId" v-bind:message="!parent ? `>>${id}` : `>>${parentId}`"/>
+    <Form v-if="isFormVisible"
+          v-bind:parent_id="!parentId ? id : parentId"
+          v-bind:message="!parentId ? `>>${id}\n` : `>>${parentId}\n`"/>
   </b-modal>
   <vue-markdown class="post-message"
                 :typographer=true
@@ -47,6 +49,10 @@ export default {
         isThread: {
             type: Boolean,
             default: false,
+        },
+        isFeedParent: {
+            type: Boolean,
+            default: false
         }
     },
     mounted: function () {
@@ -54,15 +60,17 @@ export default {
     },
     computed: {
         filterMessage: function () {
-            return this.message.replace(/<script.+?>.+?<\/script>|<(?:!|\/?[a-zA-Z]+).*?\/?>/gmi, '');
+            return this.message.replace(/<script.+?>.+?<\/script>|<(?:!|\/?[a-zA-Z]+).*?\/?>/gmi, '')
+                .replace(/ш/gmi, 'ì̷͕̠͗͌i̴̘̎į̸̬͎̀̈́̈́')
+                .replace(/a|а/gmi, 'а̵̪̊̚')
+                .replace(/o|о/gmi, 'о̷̱̕')
+                .replace(/у/gmi, 'у̵̘̰̘̂͠')
+                .replace(/ы/gmi, 'ӹ̶̡̛͙̪͇͍̞͙̖͙̹͇͙̦̜̦̩̬͔̻̝̘͙͎͙͖͚͕͖̹͓̣̲͎̟̘͉̙̠͉́͗́̈́́͌̆́̾̃̄̇͐̌̽̓̈́͂̔͛̽͆̀͌̆̉̍̐̿̃͑͐̑̓̒̔̿̓̇̕͘̕͘̕͘͜͝͠͠ͅͅ')
+                
         }
     },
     methods: {
         selectThread: function (id) {
-            if (!this.isThread) {
-                return;
-            }
-
             if (this.parentId) {
                 this.$router.push('/thread/' + this.parentId + '#' + id);
             } else {
@@ -94,6 +102,10 @@ export default {
 <style>
 .post-message {
     margin: 30px;
+}
+
+.post-active {
+    border: 2px solid #888;
 }
 
 img {

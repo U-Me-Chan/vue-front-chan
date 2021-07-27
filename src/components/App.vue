@@ -3,6 +3,7 @@
   <div class="columns is-3">
     <div class="column is-one-fifth">
       <b-menu class="menu">
+        <span class="chan-name">I̶I̴I̶N̵3̵0̸Ч̵A̵H̴</span>
         <b-menu-list label="Разделы">
           <a href="/">Главная</a>
           <b-menu-item :label="board.name" class="menu-item" v-for="board in boards" @click="selectBoard(board.tag)" :key="board.id" v-bind:class="{ active: tag === board.tag }"></b-menu-item>
@@ -18,7 +19,7 @@
       <router-view/>
     </div>
     <div class="column is-one-quarter">
-      <Feed :posts="posts"/>
+      <Feed class="feed" :posts="posts"/>
     </div>
   </div>
 </div>
@@ -40,20 +41,26 @@ export default {
         }
     },
     created: function () {
-        var self = this;
+        this.updateData();
 
-        service.getAllBoards().then(
-            (payload) => {
-                self.posts = payload.posts;
-                self.boards = payload.boards;
-            },
-            (error) => console.log(error)
-        );
+        setInterval(() => this.updateData(), 30000);
     },
     methods: {
         selectBoard: function (tag) {
             this.tag = tag;
             this.$router.push('/board/' + tag);
+        },
+        updateData: function () {
+            var self = this;
+
+            service.getAllBoards().then(
+                (payload) => {
+                    self.$buefy.toast.open('Обновляю ленту последних постов...');
+                    self.posts = payload.posts;
+                    self.boards = payload.boards;
+                },
+                (error) => console.log(error)
+            )
         }
     }
 }
@@ -96,7 +103,7 @@ a:visited {
     list-style: none;
 }
 
-.menu-hide-button {
-    position: fixed;
+.chan-name {
+    font-size: 40px;
 }
 </style>
