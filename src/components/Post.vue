@@ -8,6 +8,7 @@
   <b-modal v-model="isFormVisible">
     <Form v-if="isFormVisible"
           v-bind:parent_id="!parentId ? id : parentId"
+          v-bind:replyMessage="filterMessage"
           v-bind:message="`>>${id}\n`"/>
   </b-modal>
   <vue-markdown class="post-message"
@@ -110,13 +111,13 @@ img {
 
 blockquote {
     margin-left: 0px;
-    border-left: 8px solid #ddd;
-    padding-left: 16px;
+    border-left: 5px solid #ddd;
+    padding-left: 2px;
     color: #083;
 }
 
 code {
-    background-color: #777;
+    background-color: #eee;
     color: #000;
     font-size: 15px;
 }

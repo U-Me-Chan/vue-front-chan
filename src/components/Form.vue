@@ -1,7 +1,14 @@
 <template>
 <div class="box">
-  <h3 v-if="parent_id">Ответить в тред</h3>
   <h3 v-if="!parent_id">Создать тред</h3>
+  <h3 v-if="parent_id">Ответить на:</h3>
+  <div class="box" v-if="replyMessage">
+    <vue-markdown class="reply-message"
+                  :typographer=true
+                  :html=true
+                  :toc=false
+                  :source=replyMessage></vue-markdown>
+  </div>
   <b-switch v-if="parent_id" v-model="isSage">Не поднимать</b-switch>
   <b-field label="Имя">
     <b-input value="Anonymous" v-model="poster"></b-input>
@@ -17,11 +24,15 @@
 </template>
 
 <script>
+import VueMarkdown from 'vue-markdown';
 import service from '../service';
 import { bus } from '../bus';
 
 export default {
     name: 'Form',
+    components: {
+      VueMarkdown
+    },
     props: {
         tag: {
             type: String,
@@ -30,7 +41,11 @@ export default {
             type: [String, Boolean, Number],
             default: false
         },
-        message : {
+        message: {
+            type: String,
+            default: ''
+        },
+        replyMessage: {
             type: String,
             default: ''
         }
@@ -85,31 +100,7 @@ export default {
 </script>
 
 <style scoped>
-.form-message, .form-subject, .form-poster, .form-submit, .form-sage {
-    background-color: #111;
-    border-color: #222;
-    color: #888;
-}
-
-.info-cell {
-    background-color: #333;
-    color: #aaa;
-}
-
-.form {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
-}
-
-.info-message {
-    color: green;
-}
-
-.error-message {
-    color: red;
-}
-
-.wrapper {
+.reply-message {
+    margin-left: 20px;
 }
 </style>
