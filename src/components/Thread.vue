@@ -77,6 +77,11 @@ export default {
         var self = this;
 
         bus.$on('form:success', () => self.init());
+
+        setInterval(() => {
+            this.$buefy.toast.open('Обновляю тред...');
+            this.init();
+        }, 30000);
     },
     watch:  {
         '$route': function (to, from) {
