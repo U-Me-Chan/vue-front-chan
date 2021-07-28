@@ -1,5 +1,5 @@
 <template>
-<div class="thread">
+<div class="thread" ref="thread-top" id="thread-top">
   <h3>{{opPost.subject ? opPost.subject : '...'}}</h3>
   <hr>
 
@@ -55,12 +55,12 @@ export default {
                 }
             );
         },
-        scrollToPost: function () {
-            var section = this.$router.currentRoute.hash.replace('#', '')
+        scrollTo: function (section, type) {
+            var el = window.document.getElementById(section);
 
-            if (section) {
-                var el = window.document.getElementById(section);
-                this.$nextTick(() => el.scrollIntoView())
+            this.$nextTick(() => el.scrollIntoView())
+
+            if (type == 'post') {
                 el.classList.add('post-active');
             }
         }
@@ -71,26 +71,39 @@ export default {
     },
     mounted: function () {
         setTimeout(() => {
-            this.scrollToPost();
+            var section = this.$router.currentRoute.hash.replace('#', '');
+
+            if (section) {
+                this.scrollTo(section, 'post');
+            } else {
+                this.scrollTo('thread-top');
+            }
         }, 1500);
+
+        // TODO: подобные вещи необходимо отменять после ухода со страницы, и обновлять данные в стор
+        // setInterval(() => {
+        //     this.$buefy.toast.open('Обновляю тред...');
+        //     this.init();
+        // }, 30000);
 
         var self = this;
 
+        // FIXME: use vues, Luke
         bus.$on('form:success', () => self.init());
-
-        setInterval(() => {
-            this.$buefy.toast.open('Обновляю тред...');
-            this.init();
-        }, 30000);
     },
     watch:  {
         '$route': function (to, from) {
             if (to !== from) {
-                this.id = this.$route.params.id
-                this.init()
-                setTimeout(() => {
-                    this.scrollToPost();
-                }, 1500);
+                this.id = this.$route.params.id;
+                this.init();
+
+                var section = this.$router.currentRoute.hash.replace('#', '');
+
+                if (section) {
+                    setTimeout(() => {
+                        this.scrollTo(section, 'post');
+                    }, 1500);
+                }
             }
         }
     },
@@ -121,8 +134,8 @@ export default {
 }
 
 h3 {
-    font-size: 27px;
+    font-size: 20px;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 </style>

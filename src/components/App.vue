@@ -3,23 +3,24 @@
   <div class="columns is-3">
     <div class="column is-one-fifth">
       <b-menu class="menu">
-        <span class="chan-name">I̶I̴I̶N̵3̵0̸Ч̵A̵H̴</span>
+        <b-menu-list>
+          <a href="/"><span class="chan-name">I̶I̴I̶N̵3̵0̸Ч̵A̵H̴</span></a>
+        </b-menu-list>
         <b-menu-list label="Разделы">
-          <a href="/">Главная</a>
           <b-menu-item :label="board.name" class="menu-item" v-for="board in boards" @click="selectBoard(board.tag)" :key="board.id" v-bind:class="{ active: tag === board.tag }"></b-menu-item>
         </b-menu-list>
         <b-menu-list label="Ссылки">
-          <a href="http://pissychan.scheoble.ml">Упрощённая версия</a>
-          <a href="https://discord.gg/DhhjsVgXBG">Discord-сервер</a>
-          <a href="https://miaolz123.github.io/vue-markdown/">Пример разметки</a>
+          <a class="menu-item" href="http://pissychan.scheoble.ml">Упрощённая версия</a>
+          <a class="menu-item" href="https://discord.gg/DhhjsVgXBG">Discord-сервер</a>
+          <a class="menu-item" href="https://miaolz123.github.io/vue-markdown/">Пример разметки</a>
         </b-menu-list>
       </b-menu>
     </div>
-    <div class="column is-half">
+    <div class="column is-half main-content">
       <router-view/>
     </div>
     <div class="column is-one-quarter">
-      <Feed class="feed" :posts="posts"/>
+      <Feed :posts="posts"/>
     </div>
   </div>
 </div>
@@ -97,6 +98,7 @@ a:visited {
 
 .menu-item {
     margin: 1px;
+    font-size: 12px;
 }
 
 .menu-item {

@@ -79,8 +79,8 @@ export default {
 
 <style scoped>
 h1 {
-    font-size: 30px;
+    font-size: 20px;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 </style>

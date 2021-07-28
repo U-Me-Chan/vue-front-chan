@@ -1,13 +1,18 @@
 <template>
 <div class="feed" v-if="posts.length">
-  <h3>Последние посты:</h3>
-  <hr>
-  <div class="card" v-for="post in posts" :key="post.id">
-    <b-tag class="poster" type="is-success is-light">{{post.poster}}</b-tag>
-    <b-tag v-if="!post.parent_id" type="is-info is-light">{{post.subject}}</b-tag>
-    <b-tag class="number">{{post.id}}</b-tag>
-    <b-button type="is-text" size="is-small" @click="selectPost(post.id, post.parent_id)">Открыть</b-button>
-    <div class="message">{{filterMessage(post.message)}}</div>
+  <div class="feed-header">
+    <h3>Последние посты</h3>
+    <hr>
+  </div>
+  <div class="feed-content">
+    <div class="card" v-for="post in posts" :key="post.id">
+      <b-tag class="poster" type="is-success is-light">{{post.poster}}</b-tag>
+      <b-tag v-if="!post.parent_id" type="is-info is-light">{{post.subject}}</b-tag>
+      <b-tag v-if="!post.parent_id" class="number">#{{post.id}}</b-tag>
+      <b-tag v-if="post.parent_id" class="number">#{{post.parent_id}} > #{{post.id}}</b-tag>
+      <b-button type="is-text" size="is-small" @click="selectPost(post.id, post.parent_id)">Открыть</b-button>
+      <div class="message">{{filterMessage(post.message)}}</div>
+    </div>
   </div>
 </div>
 </template>
@@ -23,7 +28,7 @@ export default {
     },
     methods: {
         filterMessage: function (message) {
-            return message.substring(0, 100) + '...'
+            return message.length > 100 ? message.substring(0, 100) + '...' : message;
         },
         selectPost: function (id, parentId) {
             if (parentId) {
@@ -38,14 +43,13 @@ export default {
 
 <style scoped>
 h3 {
-    font-size: 27px;
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 25px;
+    font-size: 20px;
+    margin-top: 10px;
+    padding-left: 100px;
 }
 
 .message {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .card {
@@ -55,5 +59,18 @@ h3 {
 .message {
     background-color: #fff;
     margin: 10px;
+}
+
+.feed-header {
+    position: fixed;
+}
+
+.feed-content {
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    margin-top: 95px;
+    margin-bottom: 20px;
+    overflow-y: scroll;
 }
 </style>
