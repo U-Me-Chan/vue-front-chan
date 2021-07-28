@@ -8,7 +8,7 @@
   <b-modal v-model="isFormVisible">
     <Form v-if="isFormVisible"
           v-bind:parent_id="!parentId ? id : parentId"
-          v-bind:message="!parentId ? `>>${id}\n` : `>>${parentId}\n`"/>
+          v-bind:message="`>>${id}\n`"/>
   </b-modal>
   <vue-markdown class="post-message"
                 :typographer=true
