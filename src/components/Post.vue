@@ -99,6 +99,9 @@ export default {
 <style>
 .post-message {
     margin: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .post-active {
