@@ -61,8 +61,7 @@ export default {
     },
     computed: {
         filterMessage: function () {
-            return this.message.replace(/<script.+?>.+?<\/script>|<(?:!|\/?[a-zA-Z]+).*?\/?>/gmi, '')
-                .replace(/ш/gmi, 'ì̷͕̠͗͌i̴̘̎į̸̬͎̀̈́̈́');
+            return this.message;
                 
         }
     },
