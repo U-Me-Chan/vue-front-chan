@@ -79,7 +79,9 @@ export default {
             const audio = /(https?):\/\/[a-z./0-9-_]+(\.(ogg|mp3)$)/gmi;
             const youtube = /(https:\/\/www\.youtube\.com\/watch\?v=([0-9a-z_-]+)|https:\/\/youtu\.be\/([0-9a-z_-]+))/mi;
 
-            return message.replace(reply, match => {
+            return message.replace(/<.+>/gmi, () => {
+                return '';
+            }).replace(reply, match => {
                 return `<a href='#${match.slice('>>'.length)}'>${match}</a>`;
             }).replace(youtube, (match, p1, p2, p3) => {
                 var id = p2 == null ? p3 : p2;
