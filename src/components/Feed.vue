@@ -28,6 +28,7 @@ export default {
     },
     methods: {
         filterMessage: function (message) {
+            message = message.replace(/<.+>/gmi, () => { return '' });
             return message.length > 100 ? message.substring(0, 100) + '...' : message;
         },
         selectPost: function (id, parentId) {

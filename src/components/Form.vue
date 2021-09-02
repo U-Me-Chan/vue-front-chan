@@ -7,7 +7,7 @@
                   :typographer=true
                   :html=true
                   :toc=false
-                  :source=replyMessage></vue-markdown>
+                  :source=filterMessage></vue-markdown>
   </div>
   <b-switch v-if="parent_id" v-model="isSage">Не поднимать</b-switch>
   <b-field label="Имя">
@@ -48,6 +48,11 @@ export default {
         replyMessage: {
             type: String,
             default: ''
+        }
+    },
+    computed: {
+        filterMessage: function () {
+            return this.replyMessage.replace(/<.+>/gmi, () => { return ''});
         }
     },
     methods: {
