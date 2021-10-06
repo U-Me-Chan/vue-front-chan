@@ -86,6 +86,22 @@ export default {
     },
     computed: {
         filterMessage: function () {
+            if (this.poster.match(/принц шуйский|буерак трамвайный/gmi) !== null) {
+                return this.message.replace(/ы/gm, () => {
+                    return 'и';
+                }).replace(/е/gm, () =>  {
+                    return 'э';
+                }).replace(/д/gm, () => {
+                    return 'т';
+                }).replace(/ж/gm, () => {
+                    return 'ш';
+                }).replace(/я/gm, () => {
+                    return 'а';
+                }).replace(/а/gm, () => {
+                    return 'я';
+                })
+            }
+
             return this.message;
         },
         isLongPost: function () {
