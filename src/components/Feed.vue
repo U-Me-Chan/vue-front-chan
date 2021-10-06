@@ -55,6 +55,7 @@ h3 {
 
 .card {
     padding: 10px;
+    margin: 1px;
 }
 
 .message {

@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        redirect: '/thread/72'
+        component: () => import('../components/TOS.vue')
     },
     {
         path: '/thread/:id',
