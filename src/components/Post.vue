@@ -11,12 +11,36 @@
           v-bind:replyMessage="filterMessage"
           v-bind:message="`>>${id}\n`"/>
   </b-modal>
-  <vue-markdown class="post-message"
-                :typographer=true
-                :html=true
-                :toc=false
-                :source=filterMessage
-                :prerender="prerender"></vue-markdown>
+
+  <div v-if="isLongPost" class="post-message">
+    <vue-markdown v-if="!isPostFull" :typographer=true
+                  :html=true
+                  :toc=false
+                  :source=headMessage
+                  :prerender="prerender"></vue-markdown>
+
+    <b-collapse :open="false" position="is-bottom" v-bind:aria-id="id">
+      <template #trigger>
+        <div v-bind:aria-controls="id" @click="isPostFull = !isPostFull">
+          <b-tag class="post-toggle" size="is-medium">{{ !isPostFull ? 'Показать полностью' : 'Скрыть полную версию' }}</b-tag>
+        </div>
+      </template>
+
+      <vue-markdown :typographer=true
+                    :html=true
+                    :toc=false
+                    :source=filterMessage
+                    :prerender="prerender"></vue-markdown>
+    </b-collapse>
+  </div>
+
+  <div v-if="!isLongPost" class="post-message">
+    <vue-markdown :typographer=true
+                  :html=true
+                  :toc=false
+                  :source=filterMessage
+                  :prerender="prerender"></vue-markdown>
+  </div>
 </div>
 </template>
 
@@ -32,7 +56,8 @@ export default {
     name: 'Post',
     data: function () {
         return {
-            isFormVisible: false
+            isFormVisible: false,
+            isPostFull: false
         }
     },
     props: {
@@ -62,7 +87,12 @@ export default {
     computed: {
         filterMessage: function () {
             return this.message;
-                
+        },
+        isLongPost: function () {
+            return this.message.length > 600 ? true : false;
+        },
+        headMessage: function () {
+            return this.filterMessage.slice(0, 600);
         }
     },
     methods: {
@@ -138,5 +168,9 @@ img {
 
 .tag {
     margin-right: 10px;
+}
+
+.post-toggle {
+    margin-top: 10px;
 }
 </style>
