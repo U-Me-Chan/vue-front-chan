@@ -1,4 +1,4 @@
-const url = 'http://pissykaka.scheoble.ml';
+const url = 'http://pissykaka.oxore.net';
 
 const request = function (method, uri, data = {}) {
     return new Promise((resolve, reject) => {
