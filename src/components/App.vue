@@ -10,7 +10,7 @@
           <b-menu-item :label="board.name" class="menu-item" v-for="board in boards" @click="selectBoard(board.tag)" :key="board.id" v-bind:class="{ active: tag === board.tag }"></b-menu-item>
         </b-menu-list>
         <b-menu-list label="Ссылки">
-          <a class="menu-item" href="http://pissychan.scheoble.ml">Упрощённая версия</a>
+          <a class="menu-item" href="http://pissychan.oxore.net">Упрощённая версия</a>
           <a class="menu-item" href="https://discord.gg/DhhjsVgXBG">Discord-сервер</a>
           <a class="menu-item" href="https://miaolz123.github.io/vue-markdown/">Пример разметки</a>
         </b-menu-list>
