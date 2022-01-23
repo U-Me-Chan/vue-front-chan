@@ -7,6 +7,18 @@
   <b-modal v-model="formVisible"><Form v-bind:tag="tag" /></b-modal>
   <hr>
 
+  <b-pagination
+    :total="count"
+    :current="current"
+    :per-page="perPage"
+    v-model="current"
+    v-on:change="init"
+    rangeBefore="5"
+    rangeAfter="5"
+    order="is-centered"
+    size="is-small">
+  </b-pagination>
+
   <div class="board-topics">
     <Post v-for="post in topics" :key="post.id"
           :id="post.id"
@@ -34,7 +46,10 @@ export default {
             tag: null,
             name: '',
             topics: [],
-            formVisible: false
+            formVisible: false,
+            count: 0,
+            current: 1,
+            perPage: 20
         }
     },
     mounted: function () {
@@ -53,8 +68,11 @@ export default {
         init: function () {
             var self = this;
 
-            service.getBoard(this.tag).then(
+            var offset = (this.current - 1) * this.perPage;
+
+            service.getBoard(this.tag, offset, this.perPage).then(
                 (payload) => {
+                    self.count = payload.board_data.threads_count;
                     self.topics = payload.board_data.threads;
                     self.id = payload.board_data.id;
                     self.tag = payload.board_data.tag;

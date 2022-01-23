@@ -37,8 +37,8 @@ const getAllBoards = function () {
     return request('GET', '/board/all');
 }
 
-const getBoard = function (tag) {
-    return request('GET', '/board/' + tag);
+const getBoard = function (tag, offset = 0, limit = 20) {
+    return request('GET', '/board/' + tag + '?limit=' + limit + '&offset=' + offset);
 }
 
 const getThread = function (id) {

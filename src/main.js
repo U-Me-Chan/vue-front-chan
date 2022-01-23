@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './components/App.vue'
 import router from './router'
-import { Toast, Sidebar, Menu, Button, Modal, Input, Field, Tag, Switch, Collapse } from 'buefy'
+import { Toast, Sidebar, Menu, Button, Modal, Input, Field, Tag, Switch, Collapse, Pagination } from 'buefy'
 import 'buefy/dist/buefy.css'
 
 Vue.config.productionTip = true
@@ -15,6 +15,7 @@ Vue.use(Field)
 Vue.use(Tag)
 Vue.use(Switch)
 Vue.use(Collapse)
+Vue.use(Pagination)
 
 new Vue({
   router,
