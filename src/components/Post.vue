@@ -158,7 +158,6 @@ code {
 
 img {
     max-width: 100%;
-    height: 360px;
     width: auto;
 }
 
