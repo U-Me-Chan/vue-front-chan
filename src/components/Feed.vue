@@ -7,7 +7,7 @@
   <div class="feed-content">
     <div class="card" v-for="post in posts" :key="post.id">
       <b-tag class="poster" type="is-success is-light">{{post.poster}}</b-tag>
-      <b-tag v-if="!post.parent_id" type="is-info is-light">{{post.subject}}</b-tag>
+      <b-tag v-if="!post.parent_id && post.subject" type="is-info is-light">{{post.subject}}</b-tag>
       <b-tag v-if="!post.parent_id" class="number">#{{post.id}}</b-tag>
       <b-tag v-if="post.parent_id" class="number">#{{post.parent_id}} > #{{post.id}}</b-tag>
       <b-button type="is-text" size="is-small" @click="selectPost(post.id, post.parent_id)">Открыть</b-button>
