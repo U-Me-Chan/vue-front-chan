@@ -22,8 +22,10 @@
 
 <script>
 import Post from './Post.vue'
-import service from '../service'
 import { bus } from '../bus'
+
+const config = require('../../config')
+const axios  = require('axios');
 
 export default {
     name: 'Thread',
@@ -34,26 +36,24 @@ export default {
         init: function () {
             var self = this;
 
-            service.getThread(this.id).then(
-                (payload) => {
-                    if (payload.thread_data.parent_id !== null) {
-                        self.id = payload.thread_data.parent_id;
-                        self.init();
-                    }
-
-                    self.opPost = {
-                        id: payload.thread_data.id,
-                        poster: payload.thread_data.poster,
-                        subject: payload.thread_data.subject,
-                        message: payload.thread_data.message
-                    };
-
-                    self.replies = payload.thread_data.replies;
-                },
-                (error) => {
-                    console.log(error);
+            axios.get(config.chan_url + '/post/' + this.id).then((response) => {
+                if (response.data.payload.thread_data.parent_id !== null) {
+                    self.id = response.data.thread_data.parent_id;
+                    self.init();
                 }
-            );
+
+                self.opPost = {
+                    id: response.data.payload.thread_data.id,
+                    poster: response.data.payload.thread_data.poster,
+                    subject: response.data.payload.thread_data.subject,
+                    message: response.data.payload.thread_data.message
+                };
+
+                self.replies = response.data.payload.thread_data.replies;
+            }).catch((error) => {
+                console.log(error);
+                self.$buefy.toast.open(`Произошла ошибка при запросе данных треда: ${error}`);
+            });
         },
         scrollTo: function (section, type) {
             var el = window.document.getElementById(section);

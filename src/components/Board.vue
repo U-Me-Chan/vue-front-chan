@@ -31,10 +31,12 @@
 </template>
 
 <script>
-import service from '../service'
 import { bus } from '../bus'
 import Post from './Post.vue'
 import Form from './Form.vue'
+
+const axios = require('axios')
+const config = require('../../config')
 
 export default {
     name: 'Board',
@@ -67,21 +69,23 @@ export default {
     methods: {
         init: function () {
             var self = this;
-
             var offset = (this.current - 1) * this.perPage;
 
-            service.getBoard(this.tag, offset, this.perPage).then(
-                (payload) => {
-                    self.count = payload.board_data.threads_count;
-                    self.topics = payload.board_data.threads;
-                    self.id = payload.board_data.id;
-                    self.tag = payload.board_data.tag;
-                    self.name = payload.board_data.name;
-                },
-                error => () => {
-                    console.log(error);
+            axios.get(config.chan_url + '/board/' + this.tag, {
+                params: {
+                    offset: offset,
+                    limit: this.perPage
                 }
-            );
+            }).then((response) => {
+                self.count = response.data.payload.board_data.threads_count;
+                self.topics = response.data.payload.board_data.threads;
+                self.id = response.data.payload.board_data.id;
+                self.tag = response.data.payload.board_data.tag;
+                self.name = response.data.payload.board_data.name;
+            }).catch((error) => {
+                self.$buefy.toast.open('Произошла ошибка при запросе данных с сервера');
+                console.log(error);
+            })
         }
     },
     watch: {

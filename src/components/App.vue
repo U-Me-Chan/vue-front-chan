@@ -27,8 +27,10 @@
 </template>
 
 <script>
-import service from '../service'
 import Feed from './Feed.vue'
+import axios from 'axios'
+
+const config = require('../../config')
 
 export default {
     components: {
@@ -54,14 +56,15 @@ export default {
         updateData: function () {
             var self = this;
 
-            service.getAllBoards().then(
-                (payload) => {
-                    self.$buefy.toast.open('Обновляю ленту последних постов...');
-                    self.posts = payload.posts;
-                    self.boards = payload.boards;
-                },
-                (error) => console.log(error)
-            )
+            axios.get(config.chan_url + '/board/all').then((response) => {
+                self.$buefy.toast.open('Обновляю ленту последних постов...');
+
+                self.posts = response.data.payload.posts;
+                self.boards = response.data.payload.boards;
+            }).catch((error) => {
+                self.$buefy.toast.open('Произошла ошибка при запросе данных с сервера')
+                console.log(error);
+            })
         }
     }
 }

@@ -19,14 +19,28 @@
   <b-field label="Сообщение">
     <b-input max-length="200" type="textarea" v-model="message" ref="message"></b-input>
   </b-field>
+  <b-field label="Изображение">
+    <b-upload v-model="file" class="file-label">
+      <span class="file-cta">
+	<b-icon class="file-icon" icon="upload"></b-icon>
+	<span class="file-label">PNG,JPEG или GIF файл(необязательно)</span>
+      </span>
+      <span class="file-name" v-if="file">
+	{{ file.name }}
+      </span>
+    </b-upload>
+  </b-field>
   <b-button @click="create()" type="is-primary" expanded>Отправить</b-button>
 </div>
 </template>
 
 <script>
 import VueMarkdown from 'vue-markdown';
-import service from '../service';
 import { bus } from '../bus';
+
+const config = require('../../config');
+const axios  = require('axios');
+const formData = require('form-data');
 
 export default {
     name: 'Form',
@@ -52,7 +66,7 @@ export default {
     },
     computed: {
         filterMessage: function () {
-            return this.replyMessage.replace(/<.+>/gmi, () => { return ''});
+            return this.replyMessage.replace(/<.+>/gmi, () => { return ''}); // FIXME: тупой способ защиты от XSS, не находишь?
         }
     },
     methods: {
@@ -61,7 +75,30 @@ export default {
             this.message = '';
             this.isSage = false;
         },
+        uploadImage: function() {
+            var uploadData = new formData();
+            var self = this;
+
+            uploadData.append('image', this.file, 'name.jpg');
+
+            axios.post(config.filestore_url, uploadData, { 'headers': { 'Content-Type': 'multipart/form-data'}}).then((response) => {
+                var orig = response.data.original_file;
+                var thumb = response.data.thumbnail_file;
+
+                self.message = self.message + '\n' + `[![](${thumb})](${orig})`;
+                self.image = null;
+            }).catch((error) => {
+                self.$buefy.toast.open(`Произошла ошибка при отправке изображения: ${error}`);
+                self.image = null;
+            });
+        },
         create: function () {
+            if (this.message == '') {
+                this.$buefy.toast.open('Нельзя отправить пустое сообщение!');
+            }
+
+            var self = this;
+
             var data = {};
             data['poster'] = this.poster;
             data['subject'] = this.subject;
@@ -76,21 +113,16 @@ export default {
                 data['parent_id'] = this.parent_id;
             }
 
-            service.createPost(data).then(
-                (payload) => {
-                    this.$buefy.toast.open('Отправлено!');
-                    this.init();
+            console.log(data);
 
-                    bus.$emit('form:success', [payload]);
-                },
-                (error) => {
-                    this.$buefy.dialog.alert({
-                        title: 'Ошибка!',
-                        message: `Произошла ошибка при отправке поста: ${error}`,
-                        type: 'is-danger'
-                    });
-                }
-            );
+            axios.post(config.chan_url + '/post', data).then((response) => {
+                self.$buefy.toast.open('Отправлено!');
+                self.init();
+
+                bus.$emit('form:success', [response.data]);
+            }).catch((error) => {
+                self.$buefy.toast.open(`Ошибка: ${error}`);
+            });
         }
     },
     data: function () {
@@ -98,6 +130,12 @@ export default {
             poster: 'Anonymous',
             subject: '',
             isSage: false,
+            file: null
+        }
+    },
+    watch: {
+        'file': function () {
+            this.uploadImage();
         }
     }
 }
