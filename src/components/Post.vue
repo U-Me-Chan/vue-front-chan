@@ -157,7 +157,7 @@ code {
 }
 
 img {
-    max-width: 400px;
+    max-width: 240px;
     width: auto;
 }
 
