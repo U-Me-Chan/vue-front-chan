@@ -2,6 +2,7 @@
 <div class="box" :id="id" :ref="id">
   <b-tag size="is-medium" type="is-success is-light">{{ poster }}</b-tag>
   <b-tag size="is-medium" type="is-info is-light" v-if="subject">{{subject}}</b-tag>
+  <b-tag v-if="isThread" size="is-medium" type="is-light">Ответов: {{ repliesCount }}</b-tag>
   <b-tag size="is-medium" type="is-light">#{{ !parentId ? id : parentId + '/' + id }}</b-tag>
   <b-button type="is-text" size="is-small" @click="selectThread(id)">Открыть</b-button>
   <b-button type="is-text" size="is-small" @click="isFormVisible = !isFormVisible">Ответить</b-button>
@@ -79,6 +80,10 @@ export default {
         isFeedParent: {
             type: Boolean,
             default: false
+        },
+        repliesCount: {
+            type: Number,
+            default: 0
         }
     },
     mounted: function () {
@@ -105,7 +110,7 @@ export default {
         },
         prerender: function (message) {
             const reply = />>\d{1,10}/g;
-            const image = /(?!\\!\[[a-z]+\]\()(?<!['|"])((?<twilink>https:\/\/pbs\.twimg\.com\/media\/[a-z0-9?=&]+)|(?<link>https?:\/\/[a-z.\0-9-_]+\.(?<ext>jpg|jpeg?|gif|png)(?<params>\?[a-z=&0-9]+)?))(?<!['|"])$(?!\))/gmi;
+            //const image = /(?!\\!\[[a-z]+\]\()(?<!['|"])((?<twilink>https:\/\/pbs\.twimg\.com\/media\/[a-z0-9?=&]+)|(?<link>https?:\/\/[a-z.\0-9-_]+\.(?<ext>jpg|jpeg?|gif|png)(?<params>\?[a-z=&0-9]+)?))(?<!['|"])$(?!\))/gmi;
             const audio = /(https?):\/\/[a-z./0-9-_]+(\.(ogg|mp3)$)/gmi;
             const youtube = /(https:\/\/www\.youtube\.com\/watch\?v=([0-9a-z_-]+)|https:\/\/youtu\.be\/([0-9a-z_-]+))/mi;
 
@@ -116,9 +121,7 @@ export default {
             }).replace(youtube, (match, p1, p2, p3) => {
                 var id = p2 == null ? p3 : p2;
 
-                return `<br>${match}<br><br><img class= 'yt-preview' src='http://i1.ytimg.com/vi/${id}/hqdefault.jpg' alt='preview'><br>`;
-            }).replace(image, match => {
-                return `<br><a href='${match}' target='_blank'><img src='${match}' alt='[image]' class='image is-128-128'></a><br>`;
+                return `<br>${match}<br><br><img src='http://i1.ytimg.com/vi/${id}/hqdefault.jpg' alt='preview'><br>`;
             }).replace(audio, match => {
                 return `<br><audio controls=true src='${match}'><br>`;
             });
@@ -159,10 +162,6 @@ code {
 img {
     max-width: 240px;
     width: auto;
-}
-
-.yt-preview {
-    height: 360px;
 }
 
 .tag {

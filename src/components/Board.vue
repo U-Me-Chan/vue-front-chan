@@ -25,6 +25,7 @@
           :poster="post.poster"
           :subject="post.subject"
           :message="post.message"
+          :repliesCount="post.replies_count"
           :isThread="true"/>
   </div>
 </div>

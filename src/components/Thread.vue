@@ -8,6 +8,7 @@
         :subject="opPost.subject"
         :message="opPost.message"
         :parentId="opPost.parent_id"
+	:repliesCount="opPost.repliesCount"
         :isThread="true"/>
 
   <Post class="post-reply"
@@ -46,7 +47,8 @@ export default {
                     id: response.data.payload.thread_data.id,
                     poster: response.data.payload.thread_data.poster,
                     subject: response.data.payload.thread_data.subject,
-                    message: response.data.payload.thread_data.message
+                    message: response.data.payload.thread_data.message,
+                    repliesCount: response.data.payload.thread_data.replies_count
                 };
 
                 self.replies = response.data.payload.thread_data.replies;
@@ -112,6 +114,7 @@ export default {
             id: false,
             opPost: false,
             replies: [],
+            countReplies: 0,
             isFormVisible: false
         }
     }
