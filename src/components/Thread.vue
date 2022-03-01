@@ -9,6 +9,8 @@
         :message="opPost.message"
         :parentId="opPost.parent_id"
 	:repliesCount="opPost.repliesCount"
+	:youtubes="opPost.youtubes"
+	:images="opPost.images"
         :isThread="true"/>
 
   <Post class="post-reply"
@@ -16,7 +18,9 @@
         :id="post.id"
         :poster="post.poster"
         :subject="post.subject"
-        :message="post.message"
+        :message="post.truncated_message"
+        :images="post.media.images"
+        :youtubes="post.media.youtubes"
         :parentId="post.parent_id"/>
 </div>
 </template>
@@ -47,8 +51,10 @@ export default {
                     id: response.data.payload.thread_data.id,
                     poster: response.data.payload.thread_data.poster,
                     subject: response.data.payload.thread_data.subject,
-                    message: response.data.payload.thread_data.message,
-                    repliesCount: response.data.payload.thread_data.replies_count
+                    message: response.data.payload.thread_data.truncated_message,
+                    repliesCount: response.data.payload.thread_data.replies_count,
+                    images: response.data.payload.thread_data.media.images,
+                    youtubes: response.data.payload.thread_data.media.youtubes
                 };
 
                 self.replies = response.data.payload.thread_data.replies;

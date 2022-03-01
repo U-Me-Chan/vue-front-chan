@@ -24,8 +24,10 @@
           :id="post.id"
           :poster="post.poster"
           :subject="post.subject"
-          :message="post.message"
+          :message="post.truncated_message"
           :repliesCount="post.replies_count"
+          :images="post.media.images"
+          :youtubes="post.media.youtubes"
           :isThread="true"/>
   </div>
 </div>
