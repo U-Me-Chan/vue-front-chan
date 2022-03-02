@@ -1,6 +1,6 @@
 <template>
 <div class="board">
-  <h1>/{{tag}}/ - {{name}}</h1>
+  <h1>{{name}}</h1>
 
   <hr>
   <center><b-button @click="formVisible = !formVisible">Создать новую тему</b-button></center>
@@ -13,8 +13,8 @@
     :per-page="perPage"
     v-model="current"
     v-on:change="init"
-    rangeBefore="5"
-    rangeAfter="5"
+    rangeBefore="1"
+    rangeAfter="1"
     order="is-centered"
     size="is-small">
   </b-pagination>
@@ -30,6 +30,18 @@
           :youtubes="post.media.youtubes"
           :isThread="true"/>
   </div>
+
+  <b-pagination
+    :total="count"
+    :current="current"
+    :per-page="perPage"
+    v-model="current"
+    v-on:change="init"
+    rangeBefore="1"
+    rangeAfter="1"
+    order="is-centered"
+    size="is-small">
+  </b-pagination>
 </div>
 </template>
 
@@ -107,5 +119,9 @@ h1 {
     font-size: 20px;
     text-align: center;
     margin-top: 10px;
+}
+
+hr {
+    margin: 1rem;
 }
 </style>
