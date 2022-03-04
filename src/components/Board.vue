@@ -28,6 +28,7 @@
           :repliesCount="post.replies_count"
           :images="post.media.images"
           :youtubes="post.media.youtubes"
+          :isVerify="post.is_verify"
           :isThread="true"/>
   </div>
 
