@@ -11,6 +11,7 @@
 	:repliesCount="opPost.repliesCount"
 	:youtubes="opPost.youtubes"
 	:images="opPost.images"
+	:isVerify="opPost.isVerify"
         :isThread="true"/>
 
   <Post class="post-reply"
@@ -21,6 +22,7 @@
         :message="post.truncated_message"
         :images="post.media.images"
         :youtubes="post.media.youtubes"
+	:isVerify="post.is_verify"
         :parentId="post.parent_id"/>
 </div>
 </template>
@@ -41,7 +43,7 @@ export default {
         init: function () {
             var self = this;
 
-            axios.get(config.chan_url + '/post/' + this.id).then((response) => {
+            axios.get(config.chan_url + '/v2/post/' + this.id).then((response) => {
                 if (response.data.payload.thread_data.parent_id !== null) {
                     self.id = response.data.thread_data.parent_id;
                     self.init();
@@ -54,7 +56,8 @@ export default {
                     message: response.data.payload.thread_data.truncated_message,
                     repliesCount: response.data.payload.thread_data.replies_count,
                     images: response.data.payload.thread_data.media.images,
-                    youtubes: response.data.payload.thread_data.media.youtubes
+                    youtubes: response.data.payload.thread_data.media.youtubes,
+                    isVerify: response.data.payload.thread_data.is_verify
                 };
 
                 self.replies = response.data.payload.thread_data.replies;

@@ -1,10 +1,11 @@
 <template>
 <div class="box" :id="id" :ref="id">
-  <b-tag size="is-medium" type="is-success is-light">{{ poster }}</b-tag>
-  <b-tag size="is-medium" type="is-info is-light" v-if="subject">{{subject}}</b-tag>
-  <b-tag v-if="isThread && repliesCount < 500" size="is-medium" type="is-light">Ответов: {{ repliesCount }}</b-tag>
-  <b-tag v-if="isThread && repliesCount >= 500" size="is-medium" type="is-light is-danger">Тред окончен</b-tag>
-  <b-tag size="is-medium" type="is-light">#{{ !parentId ? id : parentId + '/' + id }}</b-tag>
+  <b-tag v-if="isVerify" size="is-small" type="is-success"><b-tooltip label="Личность этого автора удостоверена">{{ poster }}</b-tooltip></b-tag>
+  <b-tag v-if="!isVerify" size="is-small" type="is-light">{{ poster }}</b-tag>
+  <b-tag size="is-small" type="is-info is-light" v-if="subject">{{subject}}</b-tag>
+  <b-tag v-if="isThread && repliesCount < 500" size="is-small" type="is-light">Ответов: {{ repliesCount }}</b-tag>
+  <b-tag v-if="isThread && repliesCount >= 500" size="is-small" type="is-light is-danger">Тред окончен</b-tag>
+  <b-tag size="is-small" type="is-light">#{{ !parentId ? id : parentId + '/' + id }}</b-tag>
   <b-button type="is-text" size="is-small" @click="selectThread(id)">Открыть</b-button>
   <b-button type="is-text" size="is-small" @click="isFormVisible = !isFormVisible">Ответить</b-button>
   <b-modal v-model="isFormVisible">
@@ -16,7 +17,9 @@
 
   <div class="media-box">
     <p class="image-box" v-for="image in images" :key="image.link">
-      <a target="_blank" :href="image.link"><img :src="image.preview"></a>
+      <a target="_blank" :href="image.link">
+	<img :src="image.preview">
+      </a>
     </p>
 
     <p class="youtube-box" v-for="youtube in youtubes" :key="youtube.link">
@@ -60,6 +63,33 @@
 import VueMarkdown from 'vue-markdown'
 import Form from './Form.vue'
 import { bus } from '../bus'
+import Prism from  'prismjs'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-c'
+import 'prismjs/components/prism-clike'
+import 'prismjs/components/prism-cpp'
+import 'prismjs/components/prism-csharp'
+import 'prismjs/components/prism-csv'
+import 'prismjs/components/prism-diff'
+import 'prismjs/components/prism-docker'
+import 'prismjs/components/prism-git'
+import 'prismjs/components/prism-go'
+import 'prismjs/components/prism-json'
+import 'prismjs/components/prism-lisp'
+import 'prismjs/components/prism-nginx'
+import 'prismjs/components/prism-makefile'
+import 'prismjs/components/prism-perl'
+import 'prismjs/components/prism-php'
+import 'prismjs/components/prism-php-extras'
+import 'prismjs/components/prism-python'
+import 'prismjs/components/prism-rust'
+import 'prismjs/components/prism-sql'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-verilog'
+import 'prismjs/components/prism-vim'
+import 'prismjs/components/prism-zig'
+import 'prismjs/components/prism-markup-templating'
+import 'prismjs/themes/prism.css'
 
 export default {
     components: {
@@ -75,6 +105,10 @@ export default {
     props: {
         id: [String,Number],
         poster: String,
+        isVerify: {
+            type: Boolean,
+            default: false
+        },
         subject: {
             type: String,
             default: '...'
@@ -101,6 +135,7 @@ export default {
     },
     mounted: function () {
         bus.$on('form:success', () => this.isFormVisible = false);
+	Prism.highlightAll();
     },
     computed: {
         filterMessage: function () {
@@ -145,10 +180,13 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    font-size: 14px;
 }
 
 .media-box {
     margin: 30px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .image-box {
@@ -178,15 +216,13 @@ blockquote {
     color: #083;
 }
 
-code {
-    background-color: #eee;
-    color: #000;
-    font-size: 15px;
-}
-
 img {
     max-width: 240px;
     width: auto;
+}
+
+pre {
+    background-color: #f5f2f0;
 }
 
 .tag {

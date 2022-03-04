@@ -94,7 +94,7 @@ a:visited {
         margin: 10px 350px 10px 350px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1200px) {
     .main-content {
 	margin: 10px 5px 10px 5px;
     }
