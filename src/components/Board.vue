@@ -86,6 +86,7 @@ export default {
         init: function () {
             var self = this;
             var offset = (this.current - 1) * this.perPage;
+            bus.$emit('app.loader', [true]);
 
             axios.get(config.chan_url + '/board/' + this.tag, {
                 params: {
@@ -98,9 +99,11 @@ export default {
                 self.id = response.data.payload.board_data.id;
                 self.tag = response.data.payload.board_data.tag;
                 self.name = response.data.payload.board_data.name;
+                bus.$emit('app.loader', [false]);
             }).catch((error) => {
                 self.$buefy.toast.open('Произошла ошибка при запросе данных с сервера');
                 console.log(error);
+                bus.$emit('app.loader', [false]);
             })
         }
     },

@@ -5,6 +5,7 @@
   </div>
 
   <div class="main-content">
+    <b-loading :can-cancel="true" v-model="isLoading" :isFullPage="true"></b-loading>
     <router-view/>
   </div>
 </div>
@@ -21,10 +22,12 @@ export default {
         return {
             boards: [],
             tag: '',
-            posts: []
+            posts: [],
+            isLoading: false
         }
     },
     created: function () {
+        this.isLoading = true;
         this.updateData();
 
         setInterval(() => this.updateData(), 30000);
@@ -34,6 +37,10 @@ export default {
 
         bus.$on('boards.update', function (params) {
             self.tag = params[0]
+        })
+
+        bus.$on('app.loader', function (args) {
+            self.isLoading = args[0]
         })
     },
     methods: {
@@ -47,9 +54,11 @@ export default {
             axios.get(config.chan_url + '/v2/board').then((response) => {
                 self.$buefy.toast.open('Обновляю счётчики...');
                 self.boards = response.data.payload.boards;
+                self.isLoading = false;
             }).catch((error) => {
                 self.$buefy.toast.open('Произошла ошибка при запросе данных с сервера')
                 console.log(error);
+                self.isLoading = false;
             })
         }
     }
@@ -95,7 +104,7 @@ a:visited {
 }
 
 .board-link {
-    margin: 10px;
+    margin: 0px;
 }
 
 .main-content {

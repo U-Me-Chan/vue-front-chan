@@ -1,5 +1,5 @@
 <template>
-<div class="box" :id="id" :ref="id">
+<div class="card" :id="id" :ref="id">
   <b-tag v-if="isVerify" size="is-small" type="is-success"><b-tooltip label="Личность этого автора удостоверена">{{ poster }}</b-tooltip></b-tag>
   <b-tag v-if="!isVerify" size="is-small" type="is-light">{{ poster }}</b-tag>
   <b-tag size="is-small" type="is-info is-light" v-if="subject">{{subject}}</b-tag>
@@ -37,7 +37,7 @@
     <b-collapse :open="false" position="is-bottom" v-bind:aria-id="id">
       <template #trigger>
         <div v-bind:aria-controls="id" @click="isPostFull = !isPostFull">
-          <b-tag class="post-toggle" size="is-medium">{{ !isPostFull ? 'Показать полностью' : 'Скрыть полную версию' }}</b-tag>
+          <b-tag class="post-toggle" size="is-small">{{ !isPostFull ? 'Показать полностью' : 'Скрыть полную версию' }}</b-tag>
         </div>
       </template>
 
@@ -131,7 +131,8 @@ export default {
             default: 0
         },
         images: Array,
-        youtubes: Array
+        youtubes: Array,
+	replies: Array
     },
     mounted: function () {
         bus.$on('form:success', () => this.isFormVisible = false);
@@ -231,5 +232,10 @@ pre {
 
 .post-toggle {
     margin-top: 10px;
+}
+
+.card {
+    padding: 10px;
+    margin: 5px;
 }
 </style>

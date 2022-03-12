@@ -43,6 +43,8 @@ export default {
         init: function () {
             var self = this;
 
+            bus.$emit('app.loader', [true]);
+
             axios.get(config.chan_url + '/v2/post/' + this.id).then((response) => {
                 if (response.data.payload.thread_data.parent_id !== null) {
                     self.id = response.data.thread_data.parent_id;
@@ -62,16 +64,18 @@ export default {
 
                 self.replies = response.data.payload.thread_data.replies;
 
-		bus.$emit('boards.update', [response.data.payload.thread_data.board.tag]);
+                bus.$emit('boards.update', [response.data.payload.thread_data.board.tag]);
+                bus.$emit('app.loader', [false]);
             }).catch((error) => {
                 console.log(error);
                 self.$buefy.toast.open(`Произошла ошибка при запросе данных треда: ${error}`);
+                bus.$emit('app.loader', [false]);
             });
         },
         scrollTo: function (section, type) {
             var el = window.document.getElementById(section);
 
-            this.$nextTick(() => el.scrollIntoView())
+            //this.$nextTick(() => el.scrollIntoView())
 
             if (type == 'post') {
                 el.classList.add('post-active');
