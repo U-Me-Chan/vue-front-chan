@@ -61,6 +61,8 @@ export default {
                 };
 
                 self.replies = response.data.payload.thread_data.replies;
+
+		bus.$emit('boards.update', [response.data.payload.thread_data.board.tag]);
             }).catch((error) => {
                 console.log(error);
                 self.$buefy.toast.open(`Произошла ошибка при запросе данных треда: ${error}`);
@@ -90,12 +92,6 @@ export default {
                 this.scrollTo('thread-top');
             }
         }, 1500);
-
-        // TODO: подобные вещи необходимо отменять после ухода со страницы, и обновлять данные в стор
-        // setInterval(() => {
-        //     this.$buefy.toast.open('Обновляю тред...');
-        //     this.init();
-        // }, 30000);
 
         var self = this;
 

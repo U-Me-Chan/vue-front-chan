@@ -12,6 +12,7 @@
 
 <script>
 import axios from 'axios'
+import { bus} from '../bus'
 
 const config = require('../../config')
 
@@ -27,6 +28,13 @@ export default {
         this.updateData();
 
         setInterval(() => this.updateData(), 30000);
+    },
+    mounted: function () {
+        var self = this
+
+        bus.$on('boards.update', function (params) {
+            self.tag = params[0]
+        })
     },
     methods: {
         selectBoard: function (tag) {
