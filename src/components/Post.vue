@@ -4,7 +4,7 @@
   <b-tag v-if="!isVerify" size="is-small" type="is-light">{{ poster }}</b-tag>
   <b-tag size="is-small" type="is-info is-light" v-if="subject">{{subject}}</b-tag>
   <b-tag v-if="isThread && repliesCount < 500" size="is-small" type="is-light">Ответов: {{ repliesCount }}</b-tag>
-  <b-tag v-if="isThread && repliesCount >= 500" size="is-small" type="is-light is-danger">Тред окончен</b-tag>
+  <b-tag v-if="isThread && repliesCount >= 500" size="is-small" type="is-light is-danger">Тред не поднимется</b-tag>
   <b-tag size="is-small" type="is-light">#{{ !parentId ? id : parentId + '/' + id }}</b-tag>
   <b-button type="is-text" size="is-small" @click="selectThread(id)">Открыть</b-button>
   <b-button type="is-text" size="is-small" @click="isFormVisible = !isFormVisible">Ответить</b-button>
