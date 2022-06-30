@@ -2,13 +2,6 @@
 <div class="box">
   <h3 v-if="!parent_id">Создать тред</h3>
   <h3 v-if="parent_id">Ответить на:</h3>
-  <div class="box" v-if="replyMessage">
-    <vue-markdown class="reply-message"
-                  :typographer=true
-                  :html=true
-                  :toc=false
-                  :source=filterMessage></vue-markdown>
-  </div>
   <b-switch v-if="parent_id" v-model="isSage">Не поднимать</b-switch>
   <b-field label="Имя">
     <b-input value="Anonymous" v-model="poster"></b-input>
@@ -30,12 +23,11 @@
       </span>
     </b-upload>
   </b-field>
-  <b-button @click="create()" type="is-primary" expanded>Отправить</b-button>
+  <b-button v-bind:loading="isLoading" @click="create()" type="is-primary" expanded>Отправить</b-button>
 </div>
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown';
 import { bus } from '../bus';
 
 const config = require('../../config');
@@ -44,9 +36,6 @@ const formData = require('form-data');
 
 export default {
     name: 'Form',
-    components: {
-      VueMarkdown
-    },
     props: {
         tag: {
             type: String,
@@ -58,15 +47,6 @@ export default {
         message: {
             type: String,
             default: ''
-        },
-        replyMessage: {
-            type: String,
-            default: ''
-        }
-    },
-    computed: {
-        filterMessage: function () {
-            return this.replyMessage.replace(/<.+>/gmi, () => { return ''}); // FIXME: тупой способ защиты от XSS, не находишь?
         }
     },
     methods: {
@@ -93,9 +73,13 @@ export default {
             });
         },
         create: function () {
-            if (this.message == '') {
+            if (this.message.length == 0) {
                 this.$buefy.toast.open('Нельзя отправить пустое сообщение!');
+
+                return;
             }
+
+            this.isLoading = true;
 
             var self = this;
 
@@ -105,7 +89,7 @@ export default {
             data['message'] = this.message;
             data['tag'] = this.tag;
 
-            if (this.isSage === 'true') {
+            if (this.isSage == true) {
                 data['sage'] = true;
             }
 
@@ -113,11 +97,11 @@ export default {
                 data['parent_id'] = this.parent_id;
             }
 
-            console.log(data);
-
             axios.post(config.chan_url + '/post', data).then((response) => {
                 self.$buefy.toast.open('Отправлено!');
                 self.init();
+
+                self.isLoading = false;
 
                 bus.$emit('form:success', [response.data]);
             }).catch((error) => {
@@ -130,7 +114,8 @@ export default {
             poster: 'Anonymous',
             subject: '',
             isSage: false,
-            file: null
+            file: null,
+            isLoading: false
         }
     },
     watch: {

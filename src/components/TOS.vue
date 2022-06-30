@@ -1,56 +1,53 @@
 <template>
-  <div class="tos">
-    <h1> U III E</h1>
-    <hr>
+<div class="tos">
+  <h1> U III E</h1>
 
-    <div class="content">
-      <ol>
-        <li class="hero is-small">
-          <span class="hero-body">Не буйствуй.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не разрушай чужое.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не осуждай личное.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не бойся явности.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не будь лапшой.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не бойся знаний.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не стесняйся опыта.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не прекращай экспериментировать.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не парься.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не молчи.</span>
-        </li>
-        <li class="hero is-small">
-          <span class="hero-body">Не исключай подвоха.</span>
-        </li>
-      </ol>
-    </div>
+  <div class="content">
+    <section class="hero" v-for="board in boards" :key="board.id">
+      <div class="hero-body">
+        <p class="title"><a :href="'/board/' + board.tag">{{ board.name }}</a></p>
+        <p>
+          Новых постов за день: {{ board.new_posts_count }}
+        </p>
+        <p>
+          Всего тредов: {{ board.threads_count }}
+        </p>
+      </div>
+    </section>
   </div>
+</div>
 </template>
 
 <script>
+import axios from 'axios'
+import { bus } from '../bus'
+
+const config = require('../../config')
+
+export default {
+  data: function () {
+    return {
+      boards: []
+    }
+  },
+  created: function  () {
+    var self = this
+    
+    axios.get(config.chan_url + '/v2/board').then((response) => {
+      self.boards = response.data.payload.boards
+      bus.global.boards = response.data.payload.boards
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+}
 </script>
 
 <style scoped>
 h1 {
-    font-size: 20px;
+    font-size: 40px;
     text-align: center;
-    margin-top: 10px;
+    margin: 20px;
 }
 
 .hero {
